@@ -3,7 +3,10 @@ import { test, expect } from "@playwright/test";
 test.describe("Field Sales Admin Dashboard Smoke Tests", () => {
   test("Desktop: renders dashboard overview with KPI cards and table", async ({
     page,
+    isMobile,
   }) => {
+    test.skip(isMobile, "Desktop only test");
+
     await page.goto("/dashboard");
 
     // Check page title and brand
@@ -18,15 +21,21 @@ test.describe("Field Sales Admin Dashboard Smoke Tests", () => {
 
     // Verify operational table and map view
     await expect(page.getByText("Live Field Dispatch View")).toBeVisible();
-    await expect(page.getByText("ORD-2026-0842")).toBeVisible();
+    const orderCell = page.getByRole("cell", { name: /ORD-2026-0842/ }).first();
+    await expect(orderCell).toBeVisible();
 
     // Verify Order Drawer interaction
-    await page.getByText("ORD-2026-0842").click();
+    await orderCell.click();
     await expect(page.getByText("Operational Dispatch Timeline")).toBeVisible();
     await page.getByRole("button", { name: "Dismiss" }).click();
   });
 
-  test("Desktop: toggles sidebar collapse and expand", async ({ page }) => {
+  test("Desktop: toggles sidebar collapse and expand", async ({
+    page,
+    isMobile,
+  }) => {
+    test.skip(isMobile, "Desktop only test");
+
     await page.goto("/dashboard");
 
     // Click collapse button
@@ -45,18 +54,21 @@ test.describe("Field Sales Admin Dashboard Smoke Tests", () => {
     page,
     isMobile,
   }) => {
-    // Only test on mobile viewport
-    if (!isMobile) return;
+    test.skip(!isMobile, "Mobile only test");
 
     await page.goto("/dashboard");
 
-    // Desktop sidebar should be hidden on mobile
+    // Desktop sidebar should be hidden on mobile, hamburger toggle visible
     const toggleBtn = page.getByLabel("Toggle mobile menu");
     await expect(toggleBtn).toBeVisible();
 
     // Open mobile menu
     await toggleBtn.click();
-    await expect(page.getByText("Core Operations")).toBeVisible();
+    const mobileHeading = page
+      .locator("div.fixed")
+      .getByText("Core Operations")
+      .first();
+    await expect(mobileHeading).toBeVisible();
 
     // Close mobile menu
     await page.getByLabel("Close navigation menu").click();
