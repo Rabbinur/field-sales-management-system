@@ -1,10 +1,12 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { AuthUserDTO } from "@/types/auth";
 
 export interface UIState {
   sidebarCollapsed: boolean;
   mobileMenuOpen: boolean;
   selectedDealership: string; // 'all' or specific dealership id
   activeOrderDrawerId: string | null;
+  currentUser: AuthUserDTO | null;
 }
 
 const initialState: UIState = {
@@ -12,6 +14,7 @@ const initialState: UIState = {
   mobileMenuOpen: false,
   selectedDealership: "all",
   activeOrderDrawerId: null,
+  currentUser: null,
 };
 
 export const uiSlice = createSlice({
@@ -36,6 +39,13 @@ export const uiSlice = createSlice({
     setActiveOrderDrawer: (state, action: PayloadAction<string | null>) => {
       state.activeOrderDrawerId = action.payload;
     },
+    setCurrentUser: (state, action: PayloadAction<AuthUserDTO | null>) => {
+      state.currentUser = action.payload;
+      // Automatically lock dealership selection if user is tied to a specific dealership
+      if (action.payload?.dealershipId) {
+        state.selectedDealership = action.payload.dealershipId;
+      }
+    },
   },
 });
 
@@ -46,6 +56,8 @@ export const {
   setMobileMenuOpen,
   setSelectedDealership,
   setActiveOrderDrawer,
+  setCurrentUser,
 } = uiSlice.actions;
 
 export default uiSlice.reducer;
+
