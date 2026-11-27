@@ -44,10 +44,10 @@ export function DashboardView() {
           <div className="flex items-center justify-between mb-3">
             <div>
               <h2 className="text-base font-bold text-slate-900 tracking-tight">
-                Live Field Orders
+                Operational Orders Stream
               </h2>
               <p className="text-xs text-muted-foreground">
-                Real-time stream across all active dealership beats with instant status reconciliation.
+                Demonstration order stream with interactive search, status filtering, column sorting, pagination, and slide-over order drawer.
               </p>
             </div>
           </div>

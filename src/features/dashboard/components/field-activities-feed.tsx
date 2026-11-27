@@ -13,8 +13,8 @@ export function FieldActivitiesFeed() {
             Recent Field Telemetry
           </CardTitle>
         </div>
-        <span className="text-[11px] text-emerald-600 font-semibold bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200">
-          ● Live Stream
+        <span className="text-[11px] text-slate-600 font-semibold bg-slate-100 px-2 py-0.5 rounded border border-slate-200">
+          Sample Stream
         </span>
       </CardHeader>
       <CardContent className="p-4">

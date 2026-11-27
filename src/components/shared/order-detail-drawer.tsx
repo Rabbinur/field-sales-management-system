@@ -11,11 +11,13 @@ import {
   Circle,
   ExternalLink,
   Printer,
+  Info,
 } from "lucide-react";
 import { Order } from "@/types";
 import { formatCurrency, formatDateTime } from "@/lib/utils";
 import { StatusBadge, ERPSyncBadge } from "@/components/shared/status-badge";
 import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
 
 interface OrderDetailDrawerProps {
   order: Order | null;
@@ -42,6 +44,9 @@ export function OrderDetailDrawer({
                   {order.orderNumber}
                 </h2>
                 <StatusBadge status={order.status} />
+                <Badge variant="outline" className="text-[10px] uppercase font-semibold text-slate-600 bg-white">
+                  Regular Order
+                </Badge>
               </div>
               <p className="text-xs text-muted-foreground mt-0.5">
                 Created on {formatDateTime(order.createdAt)} • {order.dealershipName}
@@ -58,10 +63,21 @@ export function OrderDetailDrawer({
 
           {/* Body Content */}
           <div className="flex-1 overflow-y-auto p-6 space-y-6">
-            {/* Quick Actions & Sync Status */}
+            {/* Mock Data / Visual Pattern Disclaimer Banner */}
+            <div className="flex items-start gap-2.5 p-3 rounded-lg bg-blue-50/70 border border-blue-200 text-blue-900 text-xs">
+              <Info className="h-4 w-4 text-blue-600 shrink-0 mt-0.5" />
+              <div>
+                <p className="font-semibold text-blue-950">Visual Design Pattern Demo</p>
+                <p className="text-[11px] text-blue-800/80 mt-0.5">
+                  Demonstration layout for future order details. Timeline events and ERP sync tags represent simulated fixtures and will connect to live transactional services in Phase 8.
+                </p>
+              </div>
+            </div>
+
+            {/* Quick Actions & Sync Status Placeholder */}
             <div className="flex flex-wrap items-center justify-between gap-2 p-3 rounded-lg bg-slate-50 border border-slate-200">
               <div className="flex items-center gap-2">
-                <span className="text-xs text-slate-600 font-medium">ERP Integration:</span>
+                <span className="text-xs text-slate-600 font-medium">ERP Integration Status:</span>
                 <ERPSyncBadge status={order.erpSyncStatus} />
               </div>
               <div className="flex items-center gap-2">
@@ -106,7 +122,7 @@ export function OrderDetailDrawer({
                     <span>{order.srPhone}</span>
                   </p>
                   <p className="text-[11px] text-muted-foreground">
-                    Assigned Field Route • Live Beat
+                    Assigned Field Route • Beat Schedule
                   </p>
                 </div>
               </div>
@@ -151,7 +167,7 @@ export function OrderDetailDrawer({
                 </div>
               ) : (
                 <p className="text-xs text-muted-foreground p-3 bg-slate-50 rounded-lg border border-dashed">
-                  Item details will sync once connection stabilizes.
+                  No line items currently attached to this order.
                 </p>
               )}
 
@@ -178,9 +194,15 @@ export function OrderDetailDrawer({
 
             {/* Shipday-Inspired Vertical Order Timeline */}
             <div>
-              <h3 className="text-xs font-semibold uppercase tracking-wider text-slate-500 mb-3">
-                Operational Dispatch Timeline
-              </h3>
+              <div className="flex items-center justify-between mb-3">
+                <h3 className="text-xs font-semibold uppercase tracking-wider text-slate-500">
+                  Operational Milestone Timeline
+                </h3>
+                <span className="text-[10px] text-muted-foreground font-mono">
+                  Simulated Lifecycle
+                </span>
+              </div>
+
               <div className="relative pl-6 space-y-6 before:absolute before:left-2.5 before:top-2 before:bottom-2 before:w-0.5 before:bg-slate-200">
                 {order.timeline.map((event, idx) => (
                   <div key={idx} className="relative group">
@@ -201,9 +223,26 @@ export function OrderDetailDrawer({
                     </span>
                     <div>
                       <div className="flex items-center justify-between">
-                        <p className="text-xs font-semibold text-slate-900">
-                          {event.title}
-                        </p>
+                        <div className="flex items-center gap-1.5">
+                          <p className="text-xs font-semibold text-slate-900">
+                            {event.title}
+                          </p>
+                          {event.completed && (
+                            <span className="text-[9px] font-semibold text-emerald-700 bg-emerald-50 px-1 rounded">
+                              Completed
+                            </span>
+                          )}
+                          {event.active && (
+                            <span className="text-[9px] font-semibold text-blue-700 bg-blue-50 px-1 rounded">
+                              Current
+                            </span>
+                          )}
+                          {!event.completed && !event.active && (
+                            <span className="text-[9px] font-medium text-slate-400">
+                              Pending
+                            </span>
+                          )}
+                        </div>
                         <span className="text-[11px] text-muted-foreground font-mono">
                           {event.timestamp}
                         </span>
@@ -223,9 +262,9 @@ export function OrderDetailDrawer({
             <Button variant="outline" size="sm" onClick={onClose}>
               Dismiss
             </Button>
-            <Button size="sm">
+            <Button size="sm" variant="outline">
               <ExternalLink className="mr-1.5 h-3.5 w-3.5" />
-              Full Order View
+              Full Order View (Phase 8)
             </Button>
           </div>
         </div>

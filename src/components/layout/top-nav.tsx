@@ -82,24 +82,25 @@ export function TopNav({
 
       {/* Right: Operational Status, Dealership Switcher, Notifications & Profile */}
       <div className="flex items-center gap-2 sm:gap-3">
-        {/* Network & Hub Telemetry Indicator */}
-        <div className="hidden xl:flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-emerald-50 border border-emerald-200 text-emerald-800 text-[11px] font-medium">
-          <span className="h-2 w-2 rounded-full bg-emerald-500 animate-pulse" />
-          <span>Hub Online (Synced)</span>
+        {/* Environment Status Indicator (Explicit UI Mock) */}
+        <div className="hidden xl:flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-slate-100 border border-slate-200 text-slate-700 text-[11px] font-medium">
+          <span className="h-2 w-2 rounded-full bg-blue-500" />
+          <span>UI Mock Shell • Phase 1</span>
         </div>
 
-        {/* Dealership Selector Placeholder */}
+        {/* Dealership Selector Placeholder (UI Mock Only) */}
         <div className="flex items-center">
           <select
             value={selectedDealership}
             onChange={(e) => dispatch(setSelectedDealership(e.target.value))}
             className="h-8 rounded-lg border border-border bg-slate-50 px-2.5 py-0.5 text-xs font-semibold text-slate-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+            title="Dealership tenant selector (UI mock for Phase 1)"
           >
-            <option value="all">All Dealerships (Super Admin)</option>
-            <option value="dlr-1">Dhaka Central Distributor</option>
-            <option value="dlr-2">Chittagong Port Trade</option>
-            <option value="dlr-3">Dhaka North Agency</option>
-            <option value="dlr-4">Sylhet Valley Traders</option>
+            <option value="all">All Dealerships (UI Preview)</option>
+            <option value="dlr-1">Dhaka Central (Mock Tenant)</option>
+            <option value="dlr-2">Chittagong Port (Mock Tenant)</option>
+            <option value="dlr-3">Dhaka North (Mock Tenant)</option>
+            <option value="dlr-4">Sylhet Valley (Mock Tenant)</option>
           </select>
         </div>
 

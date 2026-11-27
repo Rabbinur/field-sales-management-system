@@ -20,13 +20,22 @@ test.describe("Field Sales Admin Dashboard Smoke Tests", () => {
     await expect(page.getByText("Confirmed Sales")).toBeVisible();
 
     // Verify operational table and map view
-    await expect(page.getByText("Live Field Dispatch View")).toBeVisible();
+    await expect(page.getByText("Dispatch Map Pattern")).toBeVisible();
     const orderCell = page.getByRole("cell", { name: /ORD-2026-0842/ }).first();
     await expect(orderCell).toBeVisible();
 
+    // Verify Column Sorting (click Amount)
+    const amountHeader = page.getByText("Amount (BDT)");
+    await amountHeader.click();
+    // Verify Search filter
+    const searchInput = page.getByPlaceholder("Search by order #, retailer, SR, dealer...");
+    await searchInput.fill("Bogura");
+    await expect(page.getByText("ORD-2026-0838").first()).toBeVisible();
+    await page.getByTitle("Reset all filters and sorting").click();
+
     // Verify Order Drawer interaction
     await orderCell.click();
-    await expect(page.getByText("Operational Dispatch Timeline")).toBeVisible();
+    await expect(page.getByText("Operational Milestone Timeline")).toBeVisible();
     await page.getByRole("button", { name: "Dismiss" }).click();
   });
 
