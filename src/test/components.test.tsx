@@ -1,10 +1,11 @@
-import { describe, it, expect } from "vitest";
-import { render, screen } from "@testing-library/react";
+import { describe, it, expect, vi } from "vitest";
+import { render, screen, fireEvent } from "@testing-library/react";
 import * as React from "react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { StatusBadge } from "@/components/shared/status-badge";
 import { KPICard } from "@/components/shared/kpi-card";
+import { ConfirmationDialog } from "@/components/ui/confirmation-dialog";
 
 describe("UI Components & Shared Badges", () => {
   it("renders Button with text and variant class", () => {
@@ -54,5 +55,29 @@ describe("UI Components & Shared Badges", () => {
     expect(screen.getByText("Total Outlets")).toBeInTheDocument();
     expect(screen.getByText("8,450")).toBeInTheDocument();
     expect(screen.getByText("+128")).toBeInTheDocument();
+  });
+
+  it("renders ConfirmationDialog when open and triggers confirm callback", () => {
+    const onConfirm = vi.fn();
+    const onOpenChange = vi.fn();
+
+    render(
+      <ConfirmationDialog
+        open={true}
+        onOpenChange={onOpenChange}
+        title="Cancel Order?"
+        description="Are you sure you want to cancel this order?"
+        confirmLabel="Yes, Cancel"
+        variant="destructive"
+        onConfirm={onConfirm}
+      />
+    );
+
+    expect(screen.getByText("Cancel Order?")).toBeInTheDocument();
+    expect(screen.getByText("Are you sure you want to cancel this order?")).toBeInTheDocument();
+
+    const confirmBtn = screen.getByRole("button", { name: /yes, cancel/i });
+    fireEvent.click(confirmBtn);
+    expect(onConfirm).toHaveBeenCalledTimes(1);
   });
 });
