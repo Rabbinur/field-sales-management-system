@@ -1,6 +1,14 @@
 import { test, expect } from "@playwright/test";
 
 test.describe("Field Sales Admin Dashboard Smoke Tests", () => {
+  test.beforeEach(async ({ page }) => {
+    // Authenticate through the Phase 2 Login UI
+    await page.goto("/login");
+    await page.getByText("Dealership Admin").first().click();
+    await page.getByRole("button", { name: "Authenticate & Open Shell" }).click();
+    await page.waitForURL("**/dashboard");
+  });
+
   test("Desktop: renders dashboard overview with KPI cards and table", async ({
     page,
     isMobile,

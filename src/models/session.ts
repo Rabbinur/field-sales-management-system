@@ -1,5 +1,4 @@
 import mongoose, { Schema, Model } from "mongoose";
-import { ISession } from "@/types/auth";
 
 export interface SessionDocument extends mongoose.Document {
   userId: mongoose.Types.ObjectId;
@@ -54,7 +53,7 @@ const SessionSchema = new Schema<SessionDocument>(
   {
     timestamps: true,
     toJSON: {
-      transform(_doc, ret) {
+      transform(_doc, ret: Record<string, any>) {
         delete ret.tokenHash;
         delete ret.__v;
         return ret;

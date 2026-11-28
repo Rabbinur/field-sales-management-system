@@ -1,5 +1,5 @@
 import mongoose, { Schema, Model } from "mongoose";
-import { IMembership, UserRole, MembershipStatus } from "@/types/auth";
+import { UserRole, MembershipStatus } from "@/types/auth";
 
 export interface MembershipDocument extends mongoose.Document {
   userId: mongoose.Types.ObjectId;
@@ -66,7 +66,7 @@ const MembershipSchema = new Schema<MembershipDocument>(
   {
     timestamps: true,
     toJSON: {
-      transform(_doc, ret) {
+      transform(_doc, ret: Record<string, any>) {
         delete ret.__v;
         return ret;
       },

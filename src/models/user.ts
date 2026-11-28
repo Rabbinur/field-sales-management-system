@@ -1,5 +1,5 @@
 import mongoose, { Schema, Model } from "mongoose";
-import { IUser, UserStatus } from "@/types/auth";
+import { UserStatus } from "@/types/auth";
 
 export interface UserDocument extends mongoose.Document {
   name: string;
@@ -46,7 +46,7 @@ const UserSchema = new Schema<UserDocument>(
   {
     timestamps: true,
     toJSON: {
-      transform(_doc, ret) {
+      transform(_doc, ret: Record<string, any>) {
         delete ret.passwordHash;
         delete ret.__v;
         return ret;

@@ -1,7 +1,6 @@
 "use client";
 
 import * as React from "react";
-import { useRouter } from "next/navigation";
 import {
   Lock,
   Mail,
@@ -16,7 +15,6 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
 
 const DEMO_ACCOUNTS = [
   {
@@ -50,7 +48,6 @@ const DEMO_ACCOUNTS = [
 ];
 
 export default function LoginPage() {
-  const router = useRouter();
   const [email, setEmail] = React.useState("");
   const [password, setPassword] = React.useState("");
   const [showPassword, setShowPassword] = React.useState(false);
@@ -84,7 +81,7 @@ export default function LoginPage() {
 
       // Successful login -> Redirect to dashboard
       window.location.href = "/dashboard";
-    } catch (err: any) {
+    } catch {
       setErrorMessage("Network error occurred. Please check your connection.");
       setIsLoading(false);
     }

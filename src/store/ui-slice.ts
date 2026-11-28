@@ -6,7 +6,7 @@ export interface UIState {
   mobileMenuOpen: boolean;
   selectedDealership: string; // 'all' or specific dealership id
   activeOrderDrawerId: string | null;
-  currentUser: AuthUserDTO | null;
+  currentUser?: AuthUserDTO | null;
 }
 
 const initialState: UIState = {
