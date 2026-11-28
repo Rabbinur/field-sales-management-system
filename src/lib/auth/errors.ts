@@ -30,3 +30,17 @@ export class AccountStatusError extends AuthError {
     this.name = "AccountStatusError";
   }
 }
+
+export class NotFoundError extends AuthError {
+  constructor(message = "Requested resource not found") {
+    super(message, 404, "NOT_FOUND");
+    this.name = "NotFoundError";
+  }
+}
+
+export class ConflictError extends AuthError {
+  constructor(message = "Resource already exists or violates uniqueness constraints") {
+    super(message, 409, "CONFLICT");
+    this.name = "ConflictError";
+  }
+}

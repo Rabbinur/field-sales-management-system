@@ -1,11 +1,12 @@
-import { PlaceholderPage } from "@/components/shared/placeholder-page";
+import { Metadata } from "next";
+import { DealershipsView } from "@/features/dealerships/components/dealerships-view";
+
+export const metadata: Metadata = {
+  title: "Dealerships Management | Field Sales Management System",
+  description:
+    "Multi-dealership operational management, regional facilities, and lifecycle governance.",
+};
 
 export default function DealershipsPage() {
-  return (
-    <PlaceholderPage
-      title="Dealership Management"
-      phase="Phase 5"
-      description="Multi-dealership tenant isolation, credit limit governance, and regional distribution setup."
-    />
-  );
+  return <DealershipsView />;
 }

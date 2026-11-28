@@ -143,7 +143,110 @@ async function seed() {
     console.log(`✓ Bootstrapped ${account.role}: ${normalizedEmail}`);
   }
 
-  console.log("All Phase 2 seed accounts created/updated successfully.");
+  // --- Phase 3: Bootstrap Organization & Initial Dealerships ---
+  const orgsCollection = db.collection("organizations");
+  const dealershipsCollection = db.collection("dealerships");
+
+  await orgsCollection.createIndex({ organizationId: 1 }, { unique: true });
+  await dealershipsCollection.createIndex({ dealershipId: 1 }, { unique: true });
+  await dealershipsCollection.createIndex({ code: 1 }, { unique: true });
+  await dealershipsCollection.createIndex({ businessId: 1, status: 1 });
+
+  // Organization
+  await orgsCollection.findOneAndUpdate(
+    { organizationId: "mother-company-corp" },
+    {
+      $set: {
+        organizationId: "mother-company-corp",
+        name: "Apex Consumer Goods PLC",
+        code: "APEX-HQ",
+        status: "ACTIVE",
+        updatedAt: new Date(),
+      },
+      $setOnInsert: {
+        createdAt: new Date(),
+      },
+    },
+    { upsert: true }
+  );
+  console.log("✓ Bootstrapped Organization: Apex Consumer Goods PLC (mother-company-corp)");
+
+  // Dealerships
+  const INITIAL_DEALERSHIPS = [
+    {
+      dealershipId: "dlr-1",
+      name: "Dhaka Central Distribution Hub",
+      legalName: "Dhaka Central Distribution Agency Ltd.",
+      code: "DLR-DHK-01",
+      businessId: "mother-company-corp",
+      erpDealershipCode: "ERP-DLR-001",
+      contactPerson: "Karim Ahmed",
+      phone: "+8801711000001",
+      email: "dhaka-central@dealership.field-sales.test",
+      address: "Plot 14, Tejgaon Industrial Area",
+      city: "Dhaka",
+      district: "Dhaka",
+      region: "Central",
+      status: "ACTIVE",
+      metadata: {
+        statusHistory: [
+          {
+            from: "INITIAL",
+            to: "ACTIVE",
+            changedAt: new Date(),
+            changedBy: "system",
+            reason: "Initial seed bootstrapping",
+          },
+        ],
+      },
+    },
+    {
+      dealershipId: "dlr-2",
+      name: "Chittagong Port Distribution Hub",
+      legalName: "Agrabad Commercial Sales & Distribution",
+      code: "DLR-CTG-01",
+      businessId: "mother-company-corp",
+      erpDealershipCode: "ERP-DLR-002",
+      contactPerson: "Nusrat Jahan",
+      phone: "+8801811000002",
+      email: "ctg-port@dealership.field-sales.test",
+      address: "Agrabad Commercial Area, Road 3",
+      city: "Chittagong",
+      district: "Chittagong",
+      region: "South-East",
+      status: "ACTIVE",
+      metadata: {
+        statusHistory: [
+          {
+            from: "INITIAL",
+            to: "ACTIVE",
+            changedAt: new Date(),
+            changedBy: "system",
+            reason: "Initial seed bootstrapping",
+          },
+        ],
+      },
+    },
+  ];
+
+  for (const dealer of INITIAL_DEALERSHIPS) {
+    await dealershipsCollection.findOneAndUpdate(
+      { dealershipId: dealer.dealershipId },
+      {
+        $set: {
+          ...dealer,
+          updatedAt: new Date(),
+        },
+        $setOnInsert: {
+          createdAt: new Date(),
+        },
+      },
+      { upsert: true }
+    );
+    console.log(`✓ Bootstrapped Dealership: ${dealer.name} [${dealer.dealershipId}] (${dealer.code})`);
+  }
+
+  console.log("All Phase 2 & Phase 3 seed records created/updated successfully.");
   await mongoose.disconnect();
 }
 

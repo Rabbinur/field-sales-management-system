@@ -1,6 +1,7 @@
 import * as React from "react";
 import { Badge } from "@/components/ui/badge";
 import { OrderStatus, ERPSyncStatus } from "@/types";
+import { cn } from "@/lib/utils";
 
 interface StatusBadgeProps {
   status: OrderStatus;
@@ -92,5 +93,63 @@ export function ERPSyncBadge({ status }: { status: ERPSyncStatus }) {
       );
     default:
       return null;
+  }
+}
+
+export function DealershipStatusBadge({
+  status,
+  className,
+}: {
+  status: "ACTIVE" | "INACTIVE" | "SUSPENDED" | string;
+  className?: string;
+}) {
+  switch (status) {
+    case "ACTIVE":
+      return (
+        <span
+          className={cn(
+            "inline-flex items-center text-[11px] font-semibold text-emerald-700 bg-emerald-50 px-2.5 py-0.5 rounded-full border border-emerald-200",
+            className
+          )}
+        >
+          <span className="mr-1.5 h-1.5 w-1.5 rounded-full bg-emerald-500" />
+          Active
+        </span>
+      );
+    case "INACTIVE":
+      return (
+        <span
+          className={cn(
+            "inline-flex items-center text-[11px] font-semibold text-slate-700 bg-slate-100 px-2.5 py-0.5 rounded-full border border-slate-300",
+            className
+          )}
+        >
+          <span className="mr-1.5 h-1.5 w-1.5 rounded-full bg-slate-400" />
+          Inactive
+        </span>
+      );
+    case "SUSPENDED":
+      return (
+        <span
+          className={cn(
+            "inline-flex items-center text-[11px] font-semibold text-amber-800 bg-amber-50 px-2.5 py-0.5 rounded-full border border-amber-300",
+            className
+          )}
+        >
+          <span className="mr-1.5 h-1.5 w-1.5 rounded-full bg-amber-500 animate-pulse" />
+          Suspended
+        </span>
+      );
+    default:
+      return (
+        <span
+          className={cn(
+            "inline-flex items-center text-[11px] font-semibold text-slate-600 bg-slate-50 px-2.5 py-0.5 rounded-full border border-slate-200",
+            className
+          )}
+        >
+          {status}
+        </span>
+      );
   }
 }
