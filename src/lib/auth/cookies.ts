@@ -27,9 +27,16 @@ export async function setSessionCookie(token: string): Promise<void> {
 }
 
 /**
- * Remove session cookie on logout or invalid session.
+ * Remove session cookie on logout or invalid session with matching attributes.
  */
 export async function deleteSessionCookie(): Promise<void> {
   const cookieStore = await cookies();
-  cookieStore.delete(SESSION_COOKIE_NAME);
+  cookieStore.set(SESSION_COOKIE_NAME, "", {
+    httpOnly: true,
+    secure: env.NODE_ENV === "production",
+    sameSite: "lax",
+    path: "/",
+    maxAge: 0,
+    expires: new Date(0),
+  });
 }

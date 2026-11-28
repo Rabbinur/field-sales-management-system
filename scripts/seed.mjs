@@ -58,7 +58,28 @@ const SEED_ACCOUNTS = [
 ];
 
 async function seed() {
-  console.log("Connecting to MongoDB:", MONGODB_URI.replace(/:[^:@]+@/, ":****@"));
+  const isProduction = process.env.NODE_ENV === "production";
+
+  if (isProduction) {
+    if (process.env.ALLOW_PRODUCTION_SEED !== "true") {
+      throw new Error(
+        "SAFETY ERROR: Running seed against a production environment is blocked by default. Set ALLOW_PRODUCTION_SEED=true to proceed."
+      );
+    }
+
+    // Guard against default dev passwords in production
+    for (const acc of SEED_ACCOUNTS) {
+      if (acc.password.includes("Secure2026!")) {
+        throw new Error(
+          `SAFETY ERROR: Default dev password detected for ${acc.role} in production. Provide strong, custom environment variables.`
+        );
+      }
+    }
+  }
+
+  // Mask sensitive parts of connection URI
+  const maskedUri = MONGODB_URI.replace(/:[^:@]+@/, ":****@");
+  console.log("Connecting to MongoDB:", maskedUri);
   await mongoose.connect(MONGODB_URI, { serverSelectionTimeoutMS: 10000 });
   console.log("Connected to MongoDB successfully.");
 

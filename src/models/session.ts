@@ -29,7 +29,6 @@ const SessionSchema = new Schema<SessionDocument>(
     expiresAt: {
       type: Date,
       required: true,
-      index: true,
     },
     isRevoked: {
       type: Boolean,

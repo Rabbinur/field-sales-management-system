@@ -6,6 +6,7 @@ import { verifyPassword } from "@/lib/auth/password";
 import { createSession } from "@/lib/auth/session";
 import { setSessionCookie } from "@/lib/auth/cookies";
 import { loginRateLimiter } from "@/lib/auth/rate-limiter";
+import { validateCsrfOrigin } from "@/lib/auth/csrf";
 
 const loginSchema = z.object({
   email: z.string().email("Please provide a valid email address"),
@@ -14,6 +15,14 @@ const loginSchema = z.object({
 
 export async function POST(req: NextRequest) {
   try {
+    // 0. CSRF Origin Verification
+    if (!validateCsrfOrigin(req)) {
+      return NextResponse.json(
+        { success: false, error: "Cross-site request blocked." },
+        { status: 403 }
+      );
+    }
+
     const body = await req.json();
     const parseResult = loginSchema.safeParse(body);
 
